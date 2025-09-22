@@ -110,8 +110,8 @@ init-db: up migrate-postgres migrate-clickhouse generate-ent migrate-ent seed-db
 migrate-postgres:
 	@echo "Running Postgres migrations..."
 	@sleep 5  # Wait for postgres to be ready
-	@PGPASSWORD=flexprice123 psql -h localhost -U flexprice -d flexprice -c "CREATE SCHEMA IF NOT EXISTS extensions;"
-	@PGPASSWORD=flexprice123 psql -h localhost -U flexprice -d flexprice -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\" SCHEMA extensions;"
+	@PGPASSWORD=flexprice123 psql -h localhost -p 5433 -U flexprice -d flexprice -c "CREATE SCHEMA IF NOT EXISTS extensions;"
+	@PGPASSWORD=flexprice123 psql -h localhost -p 5433 -U flexprice -d flexprice -c "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\" SCHEMA extensions;"
 	@echo "Postgres migrations complete"
 
 # Run clickhouse migrations
@@ -129,7 +129,7 @@ migrate-clickhouse:
 # Seed initial data
 seed-db:
 	@echo "Running Seed data migration..."
-	@PGPASSWORD=flexprice123 psql -h localhost -U flexprice -d flexprice -f migrations/postgres/V1__seed.sql
+	@PGPASSWORD=flexprice123 psql -h localhost -p 5433 -U flexprice -d flexprice -f migrations/postgres/V1__seed.sql
 	@echo "Postgres seed data migration complete"
 
 # Initialize kafka topics

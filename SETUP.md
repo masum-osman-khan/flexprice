@@ -74,7 +74,7 @@ go run cmd/server/main.go
 ### PostgreSQL
 
 - Host: localhost
-- Port: 5432
+- Port: 5433
 - Database: flexprice
 - Username: flexprice
 - Password: flexprice123

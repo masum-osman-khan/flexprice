@@ -32,7 +32,7 @@ kafka:
   client_id: "flexprice-client-local"
 
 clickhouse:
-  address: 127.0.0.1:9000 # For local mode
+  address: 127.0.0.1:9019 # For local mode
   # Will be overridden by FLEXPRICE_CLICKHOUSE_ADDRESS env var in Docker
   tls: false
   username: flexprice
@@ -42,7 +42,7 @@ clickhouse:
 postgres:
   host: 127.0.0.1 # For local mode
   # Will be overridden by FLEXPRICE_POSTGRES_HOST env var in Docker
-  port: 5432
+  port: 5433
   user: flexprice
   password: flexprice123
   dbname: flexprice
@@ -103,7 +103,7 @@ webhook:
     base_url: "https://api.us.svix.com"
 
 temporal:
-  address: "127.0.0.1:7233" # For local mode
+  address: "127.0.0.1:7235" # For local mode
   # Will be overridden by TEMPORAL_ADDRESS env var in Docker
   tls: false
   namespace: "default"

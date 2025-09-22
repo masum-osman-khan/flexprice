@@ -145,7 +145,7 @@ docker-compose ps
 
 This starts:
 
-- **PostgreSQL** (port 5432) - Temporal's database
+- **PostgreSQL** (port 5433) - Temporal's database
 - **Temporal Server** (port 7233) - Temporal service
 - **Temporal UI** (port 8088) - Web interface for monitoring
 - **Kafka** (port 29092) - Event streaming

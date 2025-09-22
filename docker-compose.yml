@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:15.3
     ports:
-      - 127.0.0.1:5432:5432
+      - 127.0.0.1:5433:5432
     environment:
       POSTGRES_USER: flexprice
       POSTGRES_PASSWORD: flexprice123
@@ -87,19 +87,30 @@ services:
   temporal:
     image: temporalio/auto-setup:1.26.2
     ports:
-      - "7233:7233"
+      - "7235:7233"
+    # environment:
+    #   - ENABLE_ES=false
+    #   - DB=postgres12
+    #   - DB_PORT=5432
+    #   - DB_USER=flexprice
+    #   - DB_PWD=flexprice123
+    #   - DB_NAME=temporal
+    #   - DB_HOST=postgres
+    #   - POSTGRES_USER=flexprice
+    #   - POSTGRES_PWD=flexprice123
+    #   - POSTGRES_SEEDS=postgres
+    #   - TEMPORAL_PERSISTENCE_SCHEMA_DIR=/etc/temporal/schema/postgresql/v96/temporal/versioned
     environment:
-      - ENABLE_ES=false
-      - DB=postgres12
-      - DB_PORT=5432
-      - DB_USER=flexprice
-      - DB_PWD=flexprice123
-      - DB_NAME=temporal
-      - DB_HOST=postgres
-      - POSTGRES_USER=flexprice
-      - POSTGRES_PWD=flexprice123
-      - POSTGRES_SEEDS=postgres
-      - TEMPORAL_PERSISTENCE_SCHEMA_DIR=/etc/temporal/schema/postgresql/v96/temporal/versioned
+    - ENABLE_ES=false
+    - DB=postgres12  # Changed from postgres12
+    - DB_PORT=5432   # Changed from 5433
+    - DB_USER=flexprice
+    - DB_PWD=flexprice123
+    - DB_NAME=flexprice  # Changed from temporal
+    - DB_HOST=postgres
+    - POSTGRES_USER=flexprice
+    - POSTGRES_PWD=flexprice123
+    - POSTGRES_SEEDS=postgres
     depends_on:
       postgres:
         condition: service_healthy
