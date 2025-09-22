@@ -34,7 +34,7 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - kafka-data:/var/lib/kafka/data
     healthcheck:
@@ -66,12 +66,27 @@ services:
       timeout: 3s
       retries: 30
 
+  kafka-init:
+    image: confluentinc/cp-kafka:7.7.1
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: |
+      bash -c "
+        echo 'Creating Kafka topics...'
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic events_post_processing --partitions 3 --replication-factor 1
+        kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic events_post_processing_backfill --partitions 3 --replication-factor 1
+        echo 'Kafka topics created!'
+      "
+    restart: "no"
+
   kafka-ui:
     image: ghcr.io/kafbat/kafka-ui:main
-    profiles:
-      - dev
+    # profiles:
+    #   - dev
     depends_on:
       - kafka
+      - kafka-init 
     ports:
       - "127.0.0.1:8084:8080"
     environment:
@@ -88,21 +103,9 @@ services:
     image: temporalio/auto-setup:1.26.2
     ports:
       - "7235:7233"
-    # environment:
-    #   - ENABLE_ES=false
-    #   - DB=postgres12
-    #   - DB_PORT=5432
-    #   - DB_USER=flexprice
-    #   - DB_PWD=flexprice123
-    #   - DB_NAME=temporal
-    #   - DB_HOST=postgres
-    #   - POSTGRES_USER=flexprice
-    #   - POSTGRES_PWD=flexprice123
-    #   - POSTGRES_SEEDS=postgres
-    #   - TEMPORAL_PERSISTENCE_SCHEMA_DIR=/etc/temporal/schema/postgresql/v96/temporal/versioned
     environment:
     - ENABLE_ES=false
-    - DB=postgres12  # Changed from postgres12
+    - DB=postgres12 
     - DB_PORT=5432   # Changed from 5433
     - DB_USER=flexprice
     - DB_PWD=flexprice123
@@ -111,6 +114,7 @@ services:
     - POSTGRES_USER=flexprice
     - POSTGRES_PWD=flexprice123
     - POSTGRES_SEEDS=postgres
+    - TEMPORAL_PERSISTENCE_SCHEMA_DIR=/etc/temporal/schema/postgresql/v96/temporal/versioned
     depends_on:
       postgres:
         condition: service_healthy
@@ -141,6 +145,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
       clickhouse:
         condition: service_healthy
       temporal:
@@ -165,6 +171,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
       clickhouse:
         condition: service_healthy
       temporal:
@@ -187,6 +195,8 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
       clickhouse:
         condition: service_healthy
       temporal:

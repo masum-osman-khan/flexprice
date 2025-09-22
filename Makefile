@@ -203,16 +203,21 @@ stop-flexprice:
 restart-flexprice: stop-flexprice start-flexprice
 	@echo "Flexprice services restarted successfully"
 
+# ----------------------------------------------------------------------
+# @echo "Step 3: Running database migrations and initializing Kafka..."
+# @make init-db init-kafka migrate-ent seed-db 
+# ----------------------------------------------------------------------
+
 # Full developer setup with clear instructions
 .PHONY: dev-setup
 dev-setup:
 	@echo "Setting up FlexPrice development environment..."
 	@echo "Step 1: Starting infrastructure services..."
-	@docker compose up -d postgres kafka clickhouse temporal temporal-ui
+	@docker compose up -d postgres kafka kafka-init clickhouse temporal temporal-ui kafka-ui
 	@echo "Step 2: Building FlexPrice application image..."
 	@make build-image
 	@echo "Step 3: Running database migrations and initializing Kafka..."
-	@make init-db init-kafka migrate-ent seed-db 
+	@make init-db migrate-ent seed-db 
 	@echo "Step 4: Starting FlexPrice services..."
 	@make start-flexprice
 	@echo ""
