@@ -14,14 +14,14 @@ import (
 )
 
 type InvoiceHandler struct {
-	invoiceService  service.InvoiceService
-	logger          *logger.Logger
+	invoiceService service.InvoiceService
+	logger         *logger.Logger
 }
 
 func NewInvoiceHandler(invoiceService service.InvoiceService, logger *logger.Logger) *InvoiceHandler {
 	return &InvoiceHandler{
-		invoiceService:  invoiceService,
-		logger:          logger,
+		invoiceService: invoiceService,
+		logger:         logger,
 	}
 }
 
