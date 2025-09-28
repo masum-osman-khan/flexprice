@@ -18,6 +18,11 @@ auth:
         user_id: "00000000-0000-0000-0000-000000000000"
         name: "Dev API Keys"
         is_active: true
+      "sk_01K5ZPDJXFH4CCZXF2QEQBY2AK":
+        tenant_id: "00000000-0000-0000-0000-000000000000"
+        user_id: "00000000-0000-0000-0000-000000000000"
+        name: "Working API Key"
+        is_active: true
 
 kafka:
   brokers: "localhost:29092" # For local mode
